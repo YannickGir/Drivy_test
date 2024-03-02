@@ -30,4 +30,6 @@ app.get("/cars", (req, res) => {
 });
 
 app.use(express.static("server/public"));
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`Server connected on port ${PORT}`);
+});
