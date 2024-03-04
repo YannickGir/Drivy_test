@@ -23,8 +23,8 @@ const CarList: React.FC<CarListProps> = ({ cars }) => {
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2 flex items-center justify-center">{`${car.brand} ${car.model}`}</div>
                 <p className="text-gray-700 text-base flex items-center justify-center">
-                  Price per day: {formatPrice(car.pricePerDay)} € | Price per
-                  km: {car.pricePerKm} €
+                  Price per day: {formatPrice(car.pricePerDay)} € <br />
+                  Price per km: {car.pricePerKm} €
                 </p>
               </div>
             </div>
