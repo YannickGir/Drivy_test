@@ -1,11 +1,13 @@
 import { Car } from "../types/car.interface";
+import { formatPrice, calculateTotalPrice } from "../utils/priceUtils";
 
 interface CarListProps {
   cars: Car[];
+  distance: number;
+  duration: number;
 }
 
-const CarList: React.FC<CarListProps> = ({ cars }) => {
-  const formatPrice = (price) => (price / 100).toFixed(2);
+const CarList: React.FC<CarListProps> = ({ cars, distance, duration }) => {
   return (
     <>
       {cars.length > 0 ? (
@@ -23,8 +25,15 @@ const CarList: React.FC<CarListProps> = ({ cars }) => {
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2 flex items-center justify-center">{`${car.brand} ${car.model}`}</div>
                 <p className="text-gray-700 text-base flex items-center justify-center">
-                  Price per day: {formatPrice(car.pricePerDay)} € <br />
-                  Price per km: {car.pricePerKm} €
+                  Prix par jour: {formatPrice(car.pricePerDay)} € <br />
+                  Prix par km: {formatPrice(car.pricePerKm)} € <br />
+                  Prix à payer: {calculateTotalPrice(
+                    car.pricePerDay,
+                    duration,
+                    car.pricePerKm,
+                    distance
+                  )}{" "}
+                  €
                 </p>
               </div>
             </div>

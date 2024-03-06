@@ -47,6 +47,7 @@ const Form: React.FC<FormProps> = ({ setDuration, setDistance }) => {
           onChange={handleInputChange}
           min="1"
           max="30"
+          required 
         />
         <p>Distance souhaitée :</p>
         <div

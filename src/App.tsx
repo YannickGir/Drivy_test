@@ -37,7 +37,7 @@ export default function MyApp() {
       </div>
       <div className="bottom-0 left-0 relative flex justify-center">
         <Form setDuration={setDuration} setDistance={setDistance} />
-        <CarList cars={cars} />
+        <CarList cars={cars} distance={distance} duration={duration} />
       </div>
     </>
   );
