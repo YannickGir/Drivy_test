@@ -20,9 +20,11 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/dotenv-webpack": "^7.0.7",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.2.57",
     "autoprefixer": "^10.4.17",
+    "dotenv-webpack": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
@@ -39,5 +41,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "repository": "https://github.com/YannickGir/Drivy_test.git",
+  "author": "Yannick <girofare@hotmail.com>",
+  "license": "MIT"
 }

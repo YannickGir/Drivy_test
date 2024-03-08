@@ -1,8 +1,10 @@
 const express = require("express");
 const cars = require("./cars.json");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const URL = `http://localhost:${PORT}`;
 
 app.get("/cars", (req, res) => {
