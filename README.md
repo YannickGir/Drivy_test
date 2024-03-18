@@ -1,82 +1,35 @@
-## Guidelines
+# Drivy Application
 
-- Make sure you have `git`, `node`, and `yarn` installed locally
-- Clone this repo (do **not** fork it)
-- Solve the levels in ascending order
-- Only do one commit per level and include the `.git` directory when submitting your test
-- To start the app:
-  - run `yarn install`
-  - run `yarn start`
-- Edit files in `./src`
-
-## Pointers
-
-You can have a look at the higher levels, but please do the simplest thing that could work for the level you're currently solving.
-
-We are interested in seeing code that is clean, extensible and robust, so don't overlook edge cases.
-
-Please also note that all prices are stored as integers (in cents). Do not forget to format them if needed.
-
-We don't expect you to be a top-notch designer, but we want to see how you would handle some styling of this app.
-
-This test is created using React and TypeScript, you can add additional librairies if you want to; you'll be asked to justify your choices of course.
-
-## Sending Your Results
-
-Once you are done, please send your results to someone from Qraft. If you are already in discussion with us, send it directly to the person you are talking to.
-
-You can send your Github project link or zip your directory and send it via email.
-If you do not use Github, don't forget to attach your `.git` folder.
-
-Good luck!
+Welcome to the Drivy Application repository! This application allows users to browse and filter through a variety of vehicles available for rent. Users can specify their rental preferences using a filter form, including the desired number of days and kilometers for the rental.
 
 ---
 
-## Challenge
+## Features
 
-We are building a car-sharing platform. Let's call it Drivy :)
-Car owners can already list their car on our platform and backend developers have provided an API for us to query.
+- Browse through a wide range of vehicles available for rent.
+- Filter vehicles based on rental duration and distance preferences.
+- User-friendly interface for easy selection.
+- Responsive design for optimal viewing experience across devices.
 
-Our plan is now to let any person (let's call them "driver") see cars they could rent.
+## Usage
 
-### Level 1: fetching and displaying cars
+To use the Drivy Application, follow these steps:
 
-For the first version of our app, we want drivers to see the cars they can rent. For every car returned by the backend, we want to display its picture, brand, model, price per day and price per km.
+- Clone the repository to your local machine.
+Navigate to the project directory.
+- Install dependencies by running `npm install` or `yarn install`.
+- Start the development server by running `npm start` or `yarn start`.
+- Open your web browser and visit the provided localhost URL to access the application.
+- You can also run the unit tests with `npm test` or `yarn test`.
 
-The API is accessible with a `GET` request at `http://localhost:3000/cars`.
+## Technologies Used
 
-### Level 2: filtering by duration and distance
+- React.js: JavaScript library for building user interfaces.
+- Tailwind CSS: Utility-first CSS framework for quickly styling the application.
+- React Icons: Library for adding popular icons to the application.
+- npm (Node Package Manager): Package manager for installing and managing project dependencies.
+- Express: A fast, unopinionated, minimalist web framework for Node.js.
+- Numeral.js: A library for formatting and manipulating numbers.
+- Jest: A delightful JavaScript testing framework with a focus on simplicity.
 
-Unfortunately, some cars are only available for short rentals (less than a given number of days or kilometers, defined by the owner).
-
-To only see available cars, drivers should be able to input the duration of their rental and the distance they plan on driving.
-
-The different values they should be able to select are:
-
-- duration (in days): between 1 and 30
-- distance (in kms): 50, 100, 150, 200, 250, 300, ... up to 3000
-
-When drivers edit these inputs, another request to the API, with `duration` and `distance` query parameters, should be made. The API will only return available cars for the given parameters in the response. _Please do not use the `availability` fields of the response, they are only here for debugging purposes._
-
-### Level 3: calculate rental price
-
-We heard of drivers complaining about not knowing the price for their rental. Unfortunately, the backend developers forgot to add this information so we'll have to calculate it ourselves and display it.
-
-The rental price is the sum of:
-
-- A time component: the number of rental days multiplied by the car's price per day
-- A distance component: the number of km multiplied by the car's price per km
-
-Let's calculate and display this price for every car.
-
-### Level 4: price degressivity
-
-To be as competitive as possible, we decide to have a decreasing pricing for longer rentals.
-
-New rules:
-
-- price per day decreases by 10% after 1 day
-- price per day decreases by 30% after 4 days
-- price per day decreases by 50% after 10 days
-
-Adapt the rental price computation to take these new rules into account.
+Enjoy ! 

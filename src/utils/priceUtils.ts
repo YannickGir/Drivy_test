@@ -1,51 +1,98 @@
-const formatPriceFromCentToEuros = (price?: number) => (price ? price / 100 : 0);
-const formatToString = (price?:number) => (price.toFixed(2).endsWith('.00') ? price.toFixed(2).slice(0, -3) : price.toFixed(2))
-const CalculPromotionOnPrice = (price: number, numberOfDays: number) => {
-  let percentage: string;
-  let discount: number;
-
-  if (numberOfDays > 1 && numberOfDays < 5) {
-    percentage = "10%";
-    discount = 0.9;
-  } else if (numberOfDays > 4 && numberOfDays < 11) {
-    percentage = "30%";
-    discount = 0.7;
-  } else if (numberOfDays > 10) {
-    percentage = "50%";
-    discount = 0.5;
-  } else {
-    return { price };
+const formatPriceFromCents = (price?: number) => {
+  const numeral = require("numeral");
+  function formatAmount(price: number) {
+    const formattedAmount = price % 100 === 0 ? "0" : "0,0.00";
+    return numeral(price / 100).format(formattedAmount);
   }
-
-  let pricepromoted = price * discount
-  return { pricepromoted, percentage };
+  return formatAmount(price || 0);
 };
 
-const calculateTotalPrice = (
-  pricePerDay?: number,
-  duration?: number,
-  pricePerKm?: number,
-  distance?: number
-) => {
-  let pricePerDayFormated: number = formatPriceFromCentToEuros(pricePerDay);
-  let pricePerKmFormated: number = formatPriceFromCentToEuros(pricePerKm);
-  let totalPriceDays = pricePerDayFormated * duration;
-  let totalPriceKms = pricePerKmFormated * distance;
-  let totalPrice: number;
+const roundedNumber = (n: number, decimals: number) => {
+  const factor = 10 ** decimals;
+  return Math.round(n * factor) / factor;
+};
 
-  if (!pricePerDay && pricePerKm) {
-    totalPrice = totalPriceKms;
-  } else if (!pricePerKm && pricePerDay) {
-    totalPrice = totalPriceDays;
-  } else if (!pricePerKm && !pricePerDay) {
-    totalPrice = 0;
-  } else {
-    totalPrice = totalPriceDays + totalPriceKms;
+const formatPriceWithZero = (price?: number) => {
+  const numeral = require("numeral");
+  function formatAmount(price: number) {
+    const formattedAmount =
+      price % 100 === 0 ? "0" : price % 1 === 0 ? "0" : "0,0.00";
+    return numeral(price).format(formattedAmount);
   }
+  return formatAmount(price || 0);
+};
+
+const generatePromotions = (numberOfDays: number) => {
+  const safeNumberOfDays = numberOfDays ?? 0;
+  return Array.from({ length: numberOfDays }, (_, index) => {
+    const day = index + 1;
+    if (day >= 2 && day <= 4) {
+      return 0.9;
+    } else if (day >= 5 && day <= 10) {
+      return 0.7;
+    } else if (day >= 11) {
+      return 0.5;
+    } else {
+      return 1;
+    }
+  });
+};
+
+const toRound = (numberToRound: number) =>
+  Math.round(numberToRound * 100) / 100;
+
+const calculateTotalPriceDuration = (
+  duration?: number,
+  pricePerDay?: number
+) => {
+  const safeDuration = duration ?? 0;
+  const safePricePerDay = pricePerDay ?? 0;
+  let totalRowPriceDuration = safePricePerDay * safeDuration;
+  const tabOfPromotions = generatePromotions(safeDuration);
+  const totalPromotedPriceDuration = tabOfPromotions.reduce(
+    (total?: number, promotion?: number) => {
+      const discountedPrice = safePricePerDay * promotion;
+      return toRound(total + discountedPrice);
+    },
+    0
+  );
   return {
-    currentPrice: totalPrice,
-    pricePromoted: CalculPromotionOnPrice(totalPrice, duration),
+    totalRowPriceDuration,
+    totalPromotedPriceDuration,
   };
 };
 
-export {formatToString, formatPriceFromCentToEuros, calculateTotalPrice };
+const calculateTotalPriceDistance = (
+  promotion?: number,
+  pricePerKm?: number,
+  distance?: number
+) => {
+  const safePromotion = promotion ?? 1;
+  const safePricePerKm = pricePerKm ?? 0;
+  const safeDistance = distance ?? 0;
+  const totalRowPriceDistance = safePricePerKm * safeDistance;
+  const totalPromotedPriceDistance = totalRowPriceDistance * safePromotion;
+  return {
+    totalRowPriceDistance,
+    totalPromotedPriceDistance,
+  };
+};
+
+const calculatePercentagePromotion = (
+  totalPricePromoted?: number,
+  totalRowPrice?: number
+) => {
+  const safeTotalPricePromoted = totalPricePromoted ?? 0;
+  const safeTotalRowPrice = totalRowPrice ?? safeTotalPricePromoted;
+  const percentage = (safeTotalPricePromoted / safeTotalRowPrice) * 100;
+  return percentage;
+};
+
+export {
+  calculateTotalPriceDuration,
+  calculateTotalPriceDistance,
+  formatPriceFromCents,
+  calculatePercentagePromotion,
+  roundedNumber,
+  formatPriceWithZero,
+};

@@ -1,43 +1,88 @@
-import { formatPriceFromCentToEuros, calculateTotalPrice } from "../utils/priceUtils";
+import {
+  formatPriceFromCents,
+  calculateTotalPriceDuration,
+  calculateTotalPriceDistance,
+  calculatePercentagePromotion,
+} from "../utils/priceUtils";
 
 describe("CarList functions", () => {
+  describe("calculatePercentagePromotion", () => {
+    it("should calculation the percentage of promotion with (totalPricePromoted, totalRowPrice)", () => {
+      expect(calculatePercentagePromotion(200, 400)).toBe(50);
+    });
+    it("should manage calculation of the percentage of promotion when totalPricePromoted is undefined", () => {
+      expect(calculatePercentagePromotion(undefined, 400)).toBe(0);
+    });
+    it("should manage calculation of the percentage of promotion when totalRowPrice is undefined", () => {
+      expect(calculatePercentagePromotion(200, undefined)).toBe(100);
+    });
+  });
+
   describe("formatPrice", () => {
-    it("should format price when defined", () => {
-      expect(formatPriceFromCentToEuros(500)).toBe(5);
+    it("should format price when defined without cents in euros", () => {
+      expect(formatPriceFromCents(500)).toBe("5");
+    });
+
+    it("should format price when defined with cents in euros", () => {
+      expect(formatPriceFromCents(520)).toBe("5.20");
     });
 
     it("should handle undefined price", () => {
-      expect(formatPriceFromCentToEuros(undefined)).toBe(0);
+      expect(formatPriceFromCents(undefined)).toBe("0");
     });
   });
 
-  describe("calculateTotalPrice", () => {
-    it("should calculate total price when all prices are defined", () => {
-      expect(calculateTotalPrice(200, 1, 100, 300)).toStrictEqual({"currentPrice": 302, "pricePromoted": {"price": 302}});
-    });
-
-    it("should calculate total price when all prices are defined and apply 10% promotion", () => {
-      expect(calculateTotalPrice(200, 2, 100, 300)).toStrictEqual({"currentPrice": 304, "pricePromoted": {"percentage": "10%", "pricepromoted": 273.6}});
-    });
-
-    it("should calculate total price when all prices are defined and apply 30% promotion", () => {
-      expect(calculateTotalPrice(200, 5, 100, 300)).toStrictEqual({"currentPrice": 310, "pricePromoted": {"percentage": "30%", "pricepromoted": 217}});
-    });
-
-    it("should calculate total price when all prices are defined and apply 50% promotion", () => {
-      expect(calculateTotalPrice(200, 11, 100, 300)).toStrictEqual({"currentPrice": 322, "pricePromoted": {"percentage": "50%", "pricepromoted": 161}});
-    });
-
-    it("should handle undefined pricePerDay", () => {
-      expect(calculateTotalPrice(undefined, 2, 100, 300)).toStrictEqual({"currentPrice": 300, "pricePromoted": {"percentage": "10%", "pricepromoted": 270}});
-    });
-
-    it("should handle undefined pricePerKm and apply 50% promotion", () => {
-      expect(calculateTotalPrice(200, 11, undefined, 300)).toStrictEqual({"currentPrice": 22, "pricePromoted": {"percentage": "50%", "pricepromoted": 11}});
-    });
-
-    it("should handle all prices being undefined", () => {
-      expect(calculateTotalPrice(undefined, 10, undefined, 300)).toStrictEqual({"currentPrice": 0, "pricePromoted": {"percentage": "30%", "pricepromoted": 0}});
+  describe("calculateTotalPriceDuration", () => {
+    it("should calculate total price of duration without and with promotion when (duration, pricePerDay) are defined", () => {
+      expect(calculateTotalPriceDuration(5, 3)).toStrictEqual({
+        totalRowPriceDuration: 15,
+        totalPromotedPriceDuration: 13.2,
+      });
     });
   });
+
+  it("should manage total price when only duration is defined", () => {
+    expect(calculateTotalPriceDuration(undefined, 3)).toStrictEqual({
+      totalRowPriceDuration: 0,
+      totalPromotedPriceDuration: 0,
+    });
+  });
+
+  it("should manage total price when only price is defined", () => {
+    expect(calculateTotalPriceDuration(5, undefined)).toStrictEqual({
+      totalRowPriceDuration: 0,
+      totalPromotedPriceDuration: 0,
+    });
+  });
+
+  describe("calculateTotalPriceDistance", () => {
+    it("should calculate total price of distance without and with promotion when (promotion, pricePerKm, distance) are defined", () => {
+      expect(calculateTotalPriceDistance(0.75, 0.3, 100)).toStrictEqual({
+        totalRowPriceDistance: 30,
+        totalPromotedPriceDistance: 22.5,
+      });
+    });
+  });
+
+  it("should manage calculation of total price of distance without and with promotion when promotion is undefined", () => {
+    expect(calculateTotalPriceDistance(undefined, 0.3, 100)).toStrictEqual({
+      totalRowPriceDistance: 30,
+      totalPromotedPriceDistance: 30,
+    });
+});
+
+it("should manage calculation of total price of distance without and with promotion when pricePerKm is undefined", () => {
+    expect(calculateTotalPriceDistance(0.75, undefined, 100)).toStrictEqual({
+      totalRowPriceDistance: 0,
+      totalPromotedPriceDistance: 0,
+    });
+});
+
+it("should manage calculation of total price of distance without and with promotion when distance is undefined", () => {
+    expect(calculateTotalPriceDistance(0.75, 0.3, undefined)).toStrictEqual({
+      totalRowPriceDistance: 0,
+      totalPromotedPriceDistance: 0,
+    });
+});
+
 });

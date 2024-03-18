@@ -1,4 +1,4 @@
 export interface FormPropsInterface {
-    setDuration: (value: number) => void;
-    setDistance: (value: number) => void;
-  }
+  setDuration: (value: number) => void;
+  setDistance: (value: number) => void;
+}

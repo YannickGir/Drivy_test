@@ -1,6 +1,6 @@
 import { BiChevronDown } from "react-icons/bi";
 import { useEffect, useState } from "react";
-import {FormPropsInterface} from "../types/form.interface"
+import { FormPropsInterface } from "../types/form.interface";
 
 const Form: React.FC<FormPropsInterface> = ({ setDuration, setDistance }) => {
   const [kmselected, setKmSelected] = useState(0);
@@ -12,8 +12,11 @@ const Form: React.FC<FormPropsInterface> = ({ setDuration, setDistance }) => {
     handleSubmitForm();
   }, [days, kmselected]);
 
-  const distanceTabGenerated = Array.from({ length: 60 }, (_, index) => (index + 1) * 50);
-  
+  const distanceTabGenerated = Array.from(
+    { length: 60 },
+    (_, index) => (index + 1) * 50
+  );
+
   const handleInputChangeDays = (e) => {
     setDays(e.target.value);
     setError("");
@@ -25,6 +28,7 @@ const Form: React.FC<FormPropsInterface> = ({ setDuration, setDistance }) => {
       /^\d+$/.test(days) && daysValue >= 1 && daysValue <= 30;
     if (!isIntegerAndIsBetween1And30) {
       setError("Durée: Saisir un chiffre entier de 1 à 30 !");
+      setDuration(0);
     } else if (!kmselected) {
       setError("Distance: Veuillez préciser le nombre de km.");
     } else {
@@ -35,13 +39,13 @@ const Form: React.FC<FormPropsInterface> = ({ setDuration, setDistance }) => {
   };
 
   return (
-    <div className=" pt-10 font-medium formRoot">
-    <h3 className="pb-6 sm:text-2xl text-center">Entrez vos préférences</h3>
+    <div className=" pt-10 font-medium formRoot lg:fixed">
+      <h3 className="pb-6 sm:text-2xl text-center">Entrez vos préférences</h3>
       <p className="pb-6 sm:text-1xl ">Durée de location souhaitée :</p>
 
       <input
         placeholder="Votre nombre de jours ?"
-        className="w-full px-3 py-2 pb-6 sm:text-1xl border rounded-md"
+        className="w-full px-3 py-2 sm:text-1xl border rounded-md"
         type="number"
         value={days}
         onChange={handleInputChangeDays}
@@ -64,7 +68,7 @@ const Form: React.FC<FormPropsInterface> = ({ setDuration, setDistance }) => {
           open ? "max-h-60" : "max-h-0"
         } `}
       >
-        {distanceTabGenerated?.map((distance,index) => (
+        {distanceTabGenerated?.map((distance, index) => (
           <li
             key={index}
             className={`p-2 text-sm hover:bg-sky-300 hover:text-white

@@ -13,7 +13,6 @@ export interface Car {
   }
   
   export interface CarListProps {
-  cars: Car[];
   distance: number;
   duration: number;
 }
